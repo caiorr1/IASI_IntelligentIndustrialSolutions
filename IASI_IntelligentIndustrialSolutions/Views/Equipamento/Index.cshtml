@@ -1,0 +1,27 @@
+﻿@model List<Equipamento>
+
+<h1>Lista de Equipamentos</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nome</th>
+            <th>Tipo</th>
+            <th>Localização</th>
+            <!-- Adicione outras colunas conforme necessário -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var equipamento in Model)
+        {
+            <tr>
+                <td>@equipamento.IdEquipamento</td>
+                <td>@equipamento.Nome</td>
+                <td>@equipamento.Tipo</td>
+                <td>@equipamento.Localizacao</td>
+                <!-- Adicione outras colunas conforme necessário -->
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,25 @@
+﻿@model List<Consumo>
+
+<h1>Lista de Consumos</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Data</th>
+            <th>Quantidade</th>
+            <!-- Adicione outras colunas conforme necessário -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var consumo in Model)
+        {
+            <tr>
+                <td>@consumo.IdConsumo</td>
+                <td>@consumo.Data</td>
+                <td>@consumo.Quantidade</td>
+                <!-- Adicione outras colunas conforme necessário -->
+            </tr>
+        }
+    </tbody>
+</table>

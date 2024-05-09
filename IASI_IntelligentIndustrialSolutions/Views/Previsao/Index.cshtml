@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Previsao>
+
+<h1>Lista de Previsões</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Data</th>
+            <th>Descrição</th>
+            <!-- Adicione outras colunas conforme necessário -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var previsao in Model)
+        {
+            <tr>
+                <td>@previsao.IdPrevisao</td>
+                <td>@previsao.Data</td>
+                <td>@previsao.Descricao</td>
+                <!-- Adicione outras colunas conforme necessário -->
+            </tr>
+        }
+    </tbody>
+</table>
