@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IASI_IntelligentIndustrialSolutions.Models;
-using Microsoft.AspNetCore.Authentication;
 
-namespace IASI.Controllers
+namespace IASI_IntelligentIndustrialSolutions.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class PrevisaoController : ControllerBase
+    public class PrevisaoController : Controller
     {
         private readonly IasiContext _context;
 
@@ -20,88 +18,134 @@ namespace IASI.Controllers
             _context = context;
         }
 
-        // GET: api/Previsao
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Previsao>>> GetPrevisoes()
+        // GET: Previsao
+        public async Task<IActionResult> Index()
         {
-            return await _context.Previsao.ToListAsync();
+            return View(await _context.Previsao.ToListAsync());
         }
 
-        // GET: api/Previsao/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Previsao>> GetPrevisao(int id)
+        // GET: Previsao/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
-            var previsao = await _context.Previsao.FindAsync(id);
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var previsao = await _context.Previsao
+                .FirstOrDefaultAsync(m => m.IdPrevisao == id);
             if (previsao == null)
             {
                 return NotFound();
             }
 
-            return previsao;
+            return View(previsao);
         }
 
-        // GET: api/Previsao/Index
-        [HttpGet("Index")]
-        public async Task<ActionResult<IEnumerable<Previsao>>> Index()
+        // GET: Previsao/Create
+        public IActionResult Create()
         {
-            return await _context.Previsao.ToListAsync();
+            return View();
         }
 
-        // POST: api/Previsao
+        // POST: Previsao/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<ActionResult<Previsao>> PostPrevisao(Previsao previsao)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("IdPrevisao,Data,Descricao,Temperatura,Umidade,VelocidadeVento,DirecaoVento,PressaoAtmosferica,CondicaoMeteorologica")] Previsao previsao)
         {
-            _context.Previsao.Add(previsao);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetPrevisao), new { id = previsao.IdPrevisao }, previsao);
+            if (ModelState.IsValid)
+            {
+                _context.Add(previsao);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(previsao);
         }
 
-        // PUT: api/Previsao/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPrevisao(int id, Previsao previsao)
+        // GET: Previsao/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var previsao = await _context.Previsao.FindAsync(id);
+            if (previsao == null)
+            {
+                return NotFound();
+            }
+            return View(previsao);
+        }
+
+        // POST: Previsao/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("IdPrevisao,Data,Descricao,Temperatura,Umidade,VelocidadeVento,DirecaoVento,PressaoAtmosferica,CondicaoMeteorologica")] Previsao previsao)
         {
             if (id != previsao.IdPrevisao)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(previsao).State = EntityState.Modified;
-
-            try
+            if (ModelState.IsValid)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PrevisaoExists(id))
+                try
                 {
-                    return NotFound();
+                    _context.Update(previsao);
+                    await _context.SaveChangesAsync();
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    throw;
+                    if (!PrevisaoExists(previsao.IdPrevisao))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
+                return RedirectToAction(nameof(Index));
             }
-
-            return NoContent();
+            return View(previsao);
         }
 
-        // DELETE: api/Previsao/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePrevisao(int id)
+        // GET: Previsao/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
-            var previsao = await _context.Previsao.FindAsync(id);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var previsao = await _context.Previsao
+                .FirstOrDefaultAsync(m => m.IdPrevisao == id);
             if (previsao == null)
             {
                 return NotFound();
             }
 
-            _context.Previsao.Remove(previsao);
-            await _context.SaveChangesAsync();
+            return View(previsao);
+        }
 
-            return NoContent();
+        // POST: Previsao/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var previsao = await _context.Previsao.FindAsync(id);
+            if (previsao != null)
+            {
+                _context.Previsao.Remove(previsao);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         private bool PrevisaoExists(int id)

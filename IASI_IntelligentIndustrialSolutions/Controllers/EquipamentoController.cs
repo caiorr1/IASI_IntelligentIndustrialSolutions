@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IASI_IntelligentIndustrialSolutions.Models;
-using Microsoft.AspNetCore.Authentication;
 
-namespace IASI.Controllers
+namespace IASI_IntelligentIndustrialSolutions.Controllers
 {
     public class EquipamentoController : Controller
     {
@@ -20,85 +21,131 @@ namespace IASI.Controllers
         // GET: Equipamento
         public async Task<IActionResult> Index()
         {
-            var equipamentos = await _context.Equipamento.ToListAsync();
-            return View(equipamentos);
+            return View(await _context.Equipamento.ToListAsync());
         }
 
-        // GET: api/Equipamento
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Equipamento>>> GetEquipamentos()
+        // GET: Equipamento/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
-            return await _context.Equipamento.ToListAsync();
-        }
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        // GET: api/Equipamento/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Equipamento>> GetEquipamento(int id)
-        {
-            var equipamento = await _context.Equipamento.FindAsync(id);
-
+            var equipamento = await _context.Equipamento
+                .FirstOrDefaultAsync(m => m.IdEquipamento == id);
             if (equipamento == null)
             {
                 return NotFound();
             }
 
-            return equipamento;
+            return View(equipamento);
         }
 
-        // POST: api/Equipamento
-        [HttpPost]
-        public async Task<ActionResult<Equipamento>> PostEquipamento(Equipamento equipamento)
+        // GET: Equipamento/Create
+        public IActionResult Create()
         {
-            _context.Equipamento.Add(equipamento);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetEquipamento), new { id = equipamento.IdEquipamento }, equipamento);
+            return View();
         }
 
-        // PUT: api/Equipamento/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutEquipamento(int id, Equipamento equipamento)
+        // POST: Equipamento/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("IdEquipamento,Nome,Marca,Modelo,Serie,DataAquisicao,Localizacao,Status,Tipo")] Equipamento equipamento)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(equipamento);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(equipamento);
+        }
+
+        // GET: Equipamento/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var equipamento = await _context.Equipamento.FindAsync(id);
+            if (equipamento == null)
+            {
+                return NotFound();
+            }
+            return View(equipamento);
+        }
+
+        // POST: Equipamento/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("IdEquipamento,Nome,Marca,Modelo,Serie,DataAquisicao,Localizacao,Status,Tipo")] Equipamento equipamento)
         {
             if (id != equipamento.IdEquipamento)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(equipamento).State = EntityState.Modified;
-
-            try
+            if (ModelState.IsValid)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EquipamentoExists(id))
+                try
                 {
-                    return NotFound();
+                    _context.Update(equipamento);
+                    await _context.SaveChangesAsync();
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    throw;
+                    if (!EquipamentoExists(equipamento.IdEquipamento))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
+                return RedirectToAction(nameof(Index));
             }
-
-            return NoContent();
+            return View(equipamento);
         }
 
-        // DELETE: api/Equipamento/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEquipamento(int id)
+        // GET: Equipamento/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
-            var equipamento = await _context.Equipamento.FindAsync(id);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var equipamento = await _context.Equipamento
+                .FirstOrDefaultAsync(m => m.IdEquipamento == id);
             if (equipamento == null)
             {
                 return NotFound();
             }
 
-            _context.Equipamento.Remove(equipamento);
-            await _context.SaveChangesAsync();
+            return View(equipamento);
+        }
 
-            return NoContent();
+        // POST: Equipamento/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var equipamento = await _context.Equipamento.FindAsync(id);
+            if (equipamento != null)
+            {
+                _context.Equipamento.Remove(equipamento);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         private bool EquipamentoExists(int id)

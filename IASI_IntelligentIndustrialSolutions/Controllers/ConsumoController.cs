@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IASI_IntelligentIndustrialSolutions.Models;
-using Microsoft.AspNetCore.Authentication;
 
-namespace IASI.Controllers
+namespace IASI_IntelligentIndustrialSolutions.Controllers
 {
     public class ConsumoController : Controller
     {
@@ -20,85 +21,138 @@ namespace IASI.Controllers
         // GET: Consumo
         public async Task<IActionResult> Index()
         {
-            var consumos = await _context.Consumo.ToListAsync();
-            return View(consumos);
+            var iasiContext = _context.Consumo.Include(c => c.Equipamento);
+            return View(await iasiContext.ToListAsync());
         }
 
-        // GET: api/Consumo
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Consumo>>> GetConsumos()
+        // GET: Consumo/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
-            return await _context.Consumo.ToListAsync();
-        }
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        // GET: api/Consumo/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Consumo>> GetConsumo(int id)
-        {
-            var consumo = await _context.Consumo.FindAsync(id);
-
+            var consumo = await _context.Consumo
+                .Include(c => c.Equipamento)
+                .FirstOrDefaultAsync(m => m.IdConsumo == id);
             if (consumo == null)
             {
                 return NotFound();
             }
 
-            return consumo;
+            return View(consumo);
         }
 
-        // POST: api/Consumo
-        [HttpPost]
-        public async Task<ActionResult<Consumo>> PostConsumo(Consumo consumo)
+        // GET: Consumo/Create
+        public IActionResult Create()
         {
-            _context.Consumo.Add(consumo);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetConsumo), new { id = consumo.IdConsumo }, consumo);
+            ViewData["EquipamentoId"] = new SelectList(_context.Equipamento, "IdEquipamento", "Localizacao");
+            return View();
         }
 
-        // PUT: api/Consumo/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutConsumo(int id, Consumo consumo)
+        // POST: Consumo/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("IdConsumo,Data,EquipamentoId,Valor,Quantidade,UnidadeMedida,Descricao")] Consumo consumo)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(consumo);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["EquipamentoId"] = new SelectList(_context.Equipamento, "IdEquipamento", "Localizacao", consumo.EquipamentoId);
+            return View(consumo);
+        }
+
+        // GET: Consumo/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var consumo = await _context.Consumo.FindAsync(id);
+            if (consumo == null)
+            {
+                return NotFound();
+            }
+            ViewData["EquipamentoId"] = new SelectList(_context.Equipamento, "IdEquipamento", "Localizacao", consumo.EquipamentoId);
+            return View(consumo);
+        }
+
+        // POST: Consumo/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("IdConsumo,Data,EquipamentoId,Valor,Quantidade,UnidadeMedida,Descricao")] Consumo consumo)
         {
             if (id != consumo.IdConsumo)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(consumo).State = EntityState.Modified;
-
-            try
+            if (ModelState.IsValid)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ConsumoExists(id))
+                try
                 {
-                    return NotFound();
+                    _context.Update(consumo);
+                    await _context.SaveChangesAsync();
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    throw;
+                    if (!ConsumoExists(consumo.IdConsumo))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
+                return RedirectToAction(nameof(Index));
             }
-
-            return NoContent();
+            ViewData["EquipamentoId"] = new SelectList(_context.Equipamento, "IdEquipamento", "Localizacao", consumo.EquipamentoId);
+            return View(consumo);
         }
 
-        // DELETE: api/Consumo/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteConsumo(int id)
+        // GET: Consumo/Delete/5
+        public async Task<IActionResult> Delete(int? id)
         {
-            var consumo = await _context.Consumo.FindAsync(id);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var consumo = await _context.Consumo
+                .Include(c => c.Equipamento)
+                .FirstOrDefaultAsync(m => m.IdConsumo == id);
             if (consumo == null)
             {
                 return NotFound();
             }
 
-            _context.Consumo.Remove(consumo);
-            await _context.SaveChangesAsync();
+            return View(consumo);
+        }
 
-            return NoContent();
+        // POST: Consumo/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var consumo = await _context.Consumo.FindAsync(id);
+            if (consumo != null)
+            {
+                _context.Consumo.Remove(consumo);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         private bool ConsumoExists(int id)
