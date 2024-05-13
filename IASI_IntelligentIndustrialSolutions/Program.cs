@@ -1,7 +1,19 @@
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.EntityFrameworkCore;
+using IASI_IntelligentIndustrialSolutions.Models;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<IasiContext>(options =>{
+
+    options.UseOracle("Data \r\nSource=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle.fiap.com.br)(PORT=1521))) \r\n(CONNECT_DATA=(SERVER=DEDICATED)(SID=ORCL)));User Id=RM98790;Password=200105;");
+
+});
+
 
 var app = builder.Build();
 
