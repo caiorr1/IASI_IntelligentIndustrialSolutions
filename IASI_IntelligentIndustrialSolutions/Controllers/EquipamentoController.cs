@@ -38,7 +38,7 @@ public class EquipamentoController : Controller
     // POST: Equipamento/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("IdEquipamento,Nome,Descricao")] Equipamento equipamento)
+    public async Task<IActionResult> Create([Bind("IdEquipamento,Nome,Tipo,Localizacao,DataInstalacao,Estado")] Equipamento equipamento)
     {
         if (ModelState.IsValid)
         {
@@ -72,5 +72,9 @@ public class EquipamentoController : Controller
             return RedirectToAction(nameof(Index));
         }
         return View(equipamento);
+    }
+
+}
+
 
 

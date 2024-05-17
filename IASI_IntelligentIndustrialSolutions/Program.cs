@@ -14,9 +14,9 @@ builder.Services.AddDbContext<IasiContext>(options =>{
 
 });
 
-builder.Services.AddScoped<IConsumoRepository, ConsumoRepository>();
-builder.Services.AddScoped<IEquipamentoRepository, EquipamentoRepository>();
-builder.Services.AddScoped<IEmpresaRepository, EmpresaRepository>();
+builder.Services.AddTransient<IConsumoRepository, ConsumoRepository>();
+builder.Services.AddTransient<IEquipamentoRepository, EquipamentoRepository>();
+builder.Services.AddTransient<IEmpresaRepository, EmpresaRepository>();
 
 builder.Services.AddLogging(logging =>
 {
