@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,22 +6,23 @@ using IASI_IntelligentIndustrialSolutions.Models;
 
 namespace IASI_IntelligentIndustrialSolutions.Controllers
 {
-    public class PrevisaoController : Controller
+    public class EmpresaController : Controller
     {
         private readonly IasiContext _context;
 
-        public PrevisaoController(IasiContext context)
+        public EmpresaController(IasiContext context)
         {
             _context = context;
         }
 
-        // GET: Previsao
+        // GET: Empresa
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Previsao.ToListAsync());
+            var empresas = await _context.Empresa.ToListAsync();
+            return View(empresas);
         }
 
-        // GET: Previsao/Details/5
+        // GET: Empresa/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -30,37 +30,37 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
                 return NotFound();
             }
 
-            var previsao = await _context.Previsao
-                .FirstOrDefaultAsync(m => m.IdPrevisao == id);
-            if (previsao == null)
+            var empresa = await _context.Empresa
+                .FirstOrDefaultAsync(m => m.IdEmpresa == id);
+            if (empresa == null)
             {
                 return NotFound();
             }
 
-            return View(previsao);
+            return View(empresa);
         }
 
-        // GET: Previsao/Create
+        // GET: Empresa/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Previsao/Create
+        // POST: Empresa/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdPrevisao,IdEquipamento,Data,TipoPrevisao,Descricao,Probabilidade")] Previsao previsao)
+        public async Task<IActionResult> Create([Bind("IdEmpresa,NomeEmpresa,SetorIndustrial,Localizacao,Tipo,ConformidadeRegulamentar")] Empresa empresa)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(previsao);
+                _context.Add(empresa);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(previsao);
+            return View(empresa);
         }
 
-        // GET: Previsao/Edit/5
+        // GET: Empresa/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -68,20 +68,20 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
                 return NotFound();
             }
 
-            var previsao = await _context.Previsao.FindAsync(id);
-            if (previsao == null)
+            var empresa = await _context.Empresa.FindAsync(id);
+            if (empresa == null)
             {
                 return NotFound();
             }
-            return View(previsao);
+            return View(empresa);
         }
 
-        // POST: Previsao/Edit/5
+        // POST: Empresa/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdPrevisao,IdEquipamento,Data,TipoPrevisao,Descricao,Probabilidade")] Previsao previsao)
+        public async Task<IActionResult> Edit(int id, [Bind("IdEmpresa,NomeEmpresa,SetorIndustrial,Localizacao,Tipo,ConformidadeRegulamentar")] Empresa empresa)
         {
-            if (id != previsao.IdPrevisao)
+            if (id != empresa.IdEmpresa)
             {
                 return NotFound();
             }
@@ -90,12 +90,12 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
             {
                 try
                 {
-                    _context.Update(previsao);
+                    _context.Update(empresa);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PrevisaoExists(previsao.IdPrevisao))
+                    if (!EmpresaExists(empresa.IdEmpresa))
                     {
                         return NotFound();
                     }
@@ -106,10 +106,10 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(previsao);
+            return View(empresa);
         }
 
-        // GET: Previsao/Delete/5
+        // GET: Empresa/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -117,34 +117,30 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
                 return NotFound();
             }
 
-            var previsao = await _context.Previsao
-                .FirstOrDefaultAsync(m => m.IdPrevisao == id);
-            if (previsao == null)
+            var empresa = await _context.Empresa
+                .FirstOrDefaultAsync(m => m.IdEmpresa == id);
+            if (empresa == null)
             {
                 return NotFound();
             }
 
-            return View(previsao);
+            return View(empresa);
         }
 
-        // POST: Previsao/Delete/5
+        // POST: Empresa/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var previsao = await _context.Previsao.FindAsync(id);
-            if (previsao != null)
-            {
-                _context.Previsao.Remove(previsao);
-            }
-
+            var empresa = await _context.Empresa.FindAsync(id);
+            _context.Empresa.Remove(empresa);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PrevisaoExists(int id)
+        private bool EmpresaExists(int id)
         {
-            return _context.Previsao.Any(e => e.IdPrevisao == id);
+            return _context.Empresa.Any(e => e.IdEmpresa == id);
         }
     }
 }

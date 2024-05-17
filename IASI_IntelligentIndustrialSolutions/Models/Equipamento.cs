@@ -31,7 +31,5 @@ namespace IASI_IntelligentIndustrialSolutions.Models
         [Required]
         public string Estado { get; set; }
 
-        // Relacionamento com Consumo
-        public ICollection<Consumo> Consumos { get; set; }
     }
 }

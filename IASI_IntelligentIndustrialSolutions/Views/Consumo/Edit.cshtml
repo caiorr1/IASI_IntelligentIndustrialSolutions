@@ -15,19 +15,14 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="IdConsumo" />
             <div class="form-group">
-                <label asp-for="Data" class="control-label"></label>
-                <input asp-for="Data" class="form-control" />
-                <span asp-validation-for="Data" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="EquipamentoId" class="control-label"></label>
-                <select asp-for="EquipamentoId" class="form-control" asp-items="ViewBag.EquipamentoId"></select>
+                <input asp-for="EquipamentoId" class="form-control" />
                 <span asp-validation-for="EquipamentoId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Valor" class="control-label"></label>
-                <input asp-for="Valor" class="form-control" />
-                <span asp-validation-for="Valor" class="text-danger"></span>
+                <label asp-for="Data" class="control-label"></label>
+                <input asp-for="Data" class="form-control" />
+                <span asp-validation-for="Data" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Quantidade" class="control-label"></label>
@@ -38,6 +33,11 @@
                 <label asp-for="UnidadeMedida" class="control-label"></label>
                 <input asp-for="UnidadeMedida" class="form-control" />
                 <span asp-validation-for="UnidadeMedida" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmissaoGas" class="control-label"></label>
+                <input asp-for="EmissaoGas" class="form-control" />
+                <span asp-validation-for="EmissaoGas" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Descricao" class="control-label"></label>

@@ -3,6 +3,7 @@ using System;
 using IASI_IntelligentIndustrialSolutions.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Oracle.EntityFrameworkCore.Metadata;
 
@@ -11,9 +12,11 @@ using Oracle.EntityFrameworkCore.Metadata;
 namespace IASI_IntelligentIndustrialSolutions.Migrations
 {
     [DbContext(typeof(IasiContext))]
-    partial class IasiContextModelSnapshot : ModelSnapshot
+    [Migration("20240517232608_oracledb_v1")]
+    partial class oracledb_v1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

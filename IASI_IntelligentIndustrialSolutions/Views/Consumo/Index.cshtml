@@ -14,10 +14,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Data)
+                @Html.DisplayNameFor(model => model.EquipamentoId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Valor)
+                @Html.DisplayNameFor(model => model.Data)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Quantidade)
@@ -26,10 +26,10 @@
                 @Html.DisplayNameFor(model => model.UnidadeMedida)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Descricao)
+                @Html.DisplayNameFor(model => model.EmissaoGas)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Equipamento)
+                @Html.DisplayNameFor(model => model.Descricao)
             </th>
             <th></th>
         </tr>
@@ -38,10 +38,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Data)
+                @Html.DisplayFor(modelItem => item.EquipamentoId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Valor)
+                @Html.DisplayFor(modelItem => item.Data)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Quantidade)
@@ -50,10 +50,10 @@
                 @Html.DisplayFor(modelItem => item.UnidadeMedida)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Descricao)
+                @Html.DisplayFor(modelItem => item.EmissaoGas)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Equipamento.Localizacao)
+                @Html.DisplayFor(modelItem => item.Descricao)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.IdConsumo">Edit</a> |

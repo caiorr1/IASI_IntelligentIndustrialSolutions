@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,8 +21,7 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
         // GET: Consumo
         public async Task<IActionResult> Index()
         {
-            var consumos = await _context.Consumo.Include(c => c.Equipamento).ToListAsync();
-            return View(consumos);
+            return View(await _context.Consumo.ToListAsync());
         }
 
         // GET: Consumo/Details/5
@@ -32,7 +33,6 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
             }
 
             var consumo = await _context.Consumo
-                .Include(c => c.Equipamento)
                 .FirstOrDefaultAsync(m => m.IdConsumo == id);
             if (consumo == null)
             {
@@ -45,14 +45,13 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
         // GET: Consumo/Create
         public IActionResult Create()
         {
-            ViewData["EquipamentoId"] = new SelectList(_context.Equipamento, "IdEquipamento", "Localizacao");
             return View();
         }
 
         // POST: Consumo/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdConsumo,Data,EquipamentoId,Quantidade,UnidadeMedida,Descricao,EmissaoGas")] Consumo consumo)
+        public async Task<IActionResult> Create([Bind("IdConsumo,EquipamentoId,Data,Quantidade,UnidadeMedida,EmissaoGas,Descricao")] Consumo consumo)
         {
             if (ModelState.IsValid)
             {
@@ -60,7 +59,6 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EquipamentoId"] = new SelectList(_context.Equipamento, "IdEquipamento", "Localizacao", consumo.EquipamentoId);
             return View(consumo);
         }
 
@@ -77,14 +75,13 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
             {
                 return NotFound();
             }
-            ViewData["EquipamentoId"] = new SelectList(_context.Equipamento, "IdEquipamento", "Localizacao", consumo.EquipamentoId);
             return View(consumo);
         }
 
         // POST: Consumo/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdConsumo,Data,EquipamentoId,Quantidade,UnidadeMedida,Descricao,EmissaoGas")] Consumo consumo)
+        public async Task<IActionResult> Edit(int id, [Bind("IdConsumo,EquipamentoId,Data,Quantidade,UnidadeMedida,EmissaoGas,Descricao")] Consumo consumo)
         {
             if (id != consumo.IdConsumo)
             {
@@ -111,7 +108,6 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EquipamentoId"] = new SelectList(_context.Equipamento, "IdEquipamento", "Localizacao", consumo.EquipamentoId);
             return View(consumo);
         }
 
@@ -124,7 +120,6 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
             }
 
             var consumo = await _context.Consumo
-                .Include(c => c.Equipamento)
                 .FirstOrDefaultAsync(m => m.IdConsumo == id);
             if (consumo == null)
             {

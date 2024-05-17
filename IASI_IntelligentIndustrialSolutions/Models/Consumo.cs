@@ -12,7 +12,6 @@ namespace IASI_IntelligentIndustrialSolutions.Models
         public int IdConsumo { get; set; }
 
         [Column("id_equipamento")]
-        [ForeignKey("Equipamento")]
         public int EquipamentoId { get; set; }
 
         [Column("data_consumo")]
@@ -31,7 +30,5 @@ namespace IASI_IntelligentIndustrialSolutions.Models
         public double? EmissaoGas { get; set; }
 
         public string Descricao { get; set; }
-
-        public Equipamento Equipamento { get; set; }
     }
 }
