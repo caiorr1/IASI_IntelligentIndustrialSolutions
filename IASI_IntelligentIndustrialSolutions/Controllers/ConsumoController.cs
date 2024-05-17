@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -21,8 +19,8 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
         // GET: Consumo
         public async Task<IActionResult> Index()
         {
-            var iasiContext = _context.Consumo.Include(c => c.Equipamento);
-            return View(await iasiContext.ToListAsync());
+            var consumos = await _context.Consumo.Include(c => c.Equipamento).ToListAsync();
+            return View(consumos);
         }
 
         // GET: Consumo/Details/5
@@ -52,11 +50,9 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
         }
 
         // POST: Consumo/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdConsumo,Data,EquipamentoId,Valor,Quantidade,UnidadeMedida,Descricao")] Consumo consumo)
+        public async Task<IActionResult> Create([Bind("IdConsumo,Data,EquipamentoId,Quantidade,UnidadeMedida,Descricao,EmissaoGas")] Consumo consumo)
         {
             if (ModelState.IsValid)
             {
@@ -86,11 +82,9 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
         }
 
         // POST: Consumo/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdConsumo,Data,EquipamentoId,Valor,Quantidade,UnidadeMedida,Descricao")] Consumo consumo)
+        public async Task<IActionResult> Edit(int id, [Bind("IdConsumo,Data,EquipamentoId,Quantidade,UnidadeMedida,Descricao,EmissaoGas")] Consumo consumo)
         {
             if (id != consumo.IdConsumo)
             {

@@ -5,43 +5,31 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IASI_IntelligentIndustrialSolutions.Models
 {
-    [Table("tb_equipamento")]
+    [Table("TB_IASI_EQUIPAMENTO")]
     public class Equipamento
     {
         [Key]
         [Column("id_equipamento")]
         public int IdEquipamento { get; set; }
 
+        [Column("nome_equipamento")]
         [Required]
-        [Column("nome")]
-        public string Nome { get; set; }
+        public required string Nome { get; set; }
 
+        [Column("tipo_equipamento")]
         [Required]
-        [Column("marca")]
-        public string Marca { get; set; }
+        public string Tipo { get; set; }
 
+        [Column("localizacao_equipamento")]
         [Required]
-        [Column("modelo")]
-        public string Modelo { get; set; }
-
-        [Column("serie")]
-        public string Serie { get; set; }
-
-        [Required]
-        [Column("data_aquisicao")]
-        public DateTime DataAquisicao { get; set; }
-
-        [Required]
-        [Column("localizacao")]
         public string Localizacao { get; set; }
 
-        [Required]
-        [Column("status")]
-        public string Status { get; set; }
+        [Column("data_instalacao_equipamento")]
+        public DateTime DataInstalacao { get; set; }
 
+        [Column("estado_equipamento")]
         [Required]
-        [Column("tipo")]
-        public string Tipo { get; set; }
+        public string Estado { get; set; }
 
         // Relacionamento com Consumo
         public ICollection<Consumo> Consumos { get; set; }

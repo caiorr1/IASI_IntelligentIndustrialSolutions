@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IASI_IntelligentIndustrialSolutions.Models;
 
@@ -49,11 +47,9 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
         }
 
         // POST: Previsao/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdPrevisao,Data,Descricao,Temperatura,Umidade,VelocidadeVento,DirecaoVento,PressaoAtmosferica,CondicaoMeteorologica")] Previsao previsao)
+        public async Task<IActionResult> Create([Bind("IdPrevisao,IdEquipamento,Data,TipoPrevisao,Descricao,Probabilidade")] Previsao previsao)
         {
             if (ModelState.IsValid)
             {
@@ -81,11 +77,9 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
         }
 
         // POST: Previsao/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdPrevisao,Data,Descricao,Temperatura,Umidade,VelocidadeVento,DirecaoVento,PressaoAtmosferica,CondicaoMeteorologica")] Previsao previsao)
+        public async Task<IActionResult> Edit(int id, [Bind("IdPrevisao,IdEquipamento,Data,TipoPrevisao,Descricao,Probabilidade")] Previsao previsao)
         {
             if (id != previsao.IdPrevisao)
             {
