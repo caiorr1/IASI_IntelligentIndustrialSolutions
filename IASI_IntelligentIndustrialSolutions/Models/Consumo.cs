@@ -25,13 +25,13 @@ namespace IASI_IntelligentIndustrialSolutions.Models
 
         [Column("tipo_energia_consumo")]
         [Required]
-        public string UnidadeMedida { get; set; }
+        public required string UnidadeMedida { get; set; }
 
         [Column("emissao_gas_consumo")]
         public double? EmissaoGas { get; set; }
 
-        public string Descricao { get; set; }
+        public required string Descricao { get; set; }
 
-        public Equipamento Equipamento { get; set; }
+        public virtual required Equipamento Equipamento { get; set; }
     }
 }

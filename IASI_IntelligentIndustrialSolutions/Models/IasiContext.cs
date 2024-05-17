@@ -10,6 +10,6 @@ namespace IASI_IntelligentIndustrialSolutions.Models
 
         public DbSet<Consumo> Consumo { get; set; }
         public DbSet<Equipamento> Equipamento { get; set; }
-        public DbSet<Previsao> Previsao { get; set; }
+        public DbSet<Empresa> Empresa { get; set; }
     }
 }

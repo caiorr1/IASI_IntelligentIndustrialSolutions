@@ -1,4 +1,4 @@
-﻿@model IASI_IntelligentIndustrialSolutions.Models.Equipamento
+﻿@model IASI_IntelligentIndustrialSolutions.Models.Empresa
 
 @{
     ViewData["Title"] = "Details";
@@ -8,7 +8,7 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Equipamento</h4>
+    <h4>Empresa</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -18,10 +18,10 @@
             @Html.DisplayFor(model => model.Nome)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Tipo)
+            @Html.DisplayNameFor(model => model.SetorIndustrial)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Tipo)
+            @Html.DisplayFor(model => model.SetorIndustrial)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Localizacao)
@@ -30,26 +30,20 @@
             @Html.DisplayFor(model => model.Localizacao)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DataInstalacao)
+            @Html.DisplayNameFor(model => model.Tipo)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DataInstalacao)
+            @Html.DisplayFor(model => model.Tipo)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Estado)
+            @Html.DisplayNameFor(model => model.ConformidadeRegulamentar)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Estado)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.IdEquipamento)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.IdEquipamento)
+            @Html.DisplayFor(model => model.ConformidadeRegulamentar)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.IdEquipamento">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?.IdEmpresa">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

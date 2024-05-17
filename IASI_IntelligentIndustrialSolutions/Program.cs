@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication;
+ using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using IASI_IntelligentIndustrialSolutions.Models;
 
@@ -10,9 +10,13 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<IasiContext>(options =>{
 
-    options.UseOracle("Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle.fiap.com.br)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SID=ORCL)));User Id=RM98790;Password=200105;");
+    options.UseOracle("Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=oracle.fiap.com.br)(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SID=ORCL)));User Id=RM99759;Password=260404;");
 
 });
+
+builder.Services.AddScoped<IConsumoRepository, ConsumoRepository>();
+builder.Services.AddScoped<IEquipamentoRepository, EquipamentoRepository>();
+builder.Services.AddScoped<IEmpresaRepository, EmpresaRepository>();
 
 builder.Services.AddLogging(logging =>
 {

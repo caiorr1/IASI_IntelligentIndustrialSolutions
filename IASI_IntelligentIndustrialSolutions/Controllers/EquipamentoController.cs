@@ -1,150 +1,76 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using IASI_IntelligentIndustrialSolutions.Models;
 
-namespace IASI_IntelligentIndustrialSolutions.Controllers
+public class EquipamentoController : Controller
 {
-    public class EquipamentoController : Controller
+    private readonly IEquipamentoRepository _equipamentoRepository;
+
+    public EquipamentoController(IEquipamentoRepository equipamentoRepository)
     {
-        private readonly IasiContext _context;
+        _equipamentoRepository = equipamentoRepository;
+    }
 
-        public EquipamentoController(IasiContext context)
+    // GET: Equipamento
+    public async Task<IActionResult> Index()
+    {
+        var equipamentos = await _equipamentoRepository.GetAllAsync();
+        return View(equipamentos);
+    }
+
+    // GET: Equipamento/Details/{id}
+    public async Task<IActionResult> Details(int? id)
+    {
+        if (id == null) return NotFound();
+
+        var equipamento = await _equipamentoRepository.GetByIdAsync(id.Value);
+        if (equipamento == null) return NotFound();
+
+        return View(equipamento);
+    }
+
+    // GET: Equipamento/Create
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    // POST: Equipamento/Create
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("IdEquipamento,Nome,Descricao")] Equipamento equipamento)
+    {
+        if (ModelState.IsValid)
         {
-            _context = context;
-        }
-
-        // GET: Equipamento
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Equipamento.ToListAsync());
-        }
-
-        // GET: Equipamento/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var equipamento = await _context.Equipamento
-                .FirstOrDefaultAsync(m => m.IdEquipamento == id);
-            if (equipamento == null)
-            {
-                return NotFound();
-            }
-
-            return View(equipamento);
-        }
-
-        // GET: Equipamento/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Equipamento/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdEquipamento,Nome,Tipo,Localizacao,DataInstalacao,Estado")] Equipamento equipamento)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(equipamento);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(equipamento);
-        }
-
-        // GET: Equipamento/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var equipamento = await _context.Equipamento.FindAsync(id);
-            if (equipamento == null)
-            {
-                return NotFound();
-            }
-            return View(equipamento);
-        }
-
-        // POST: Equipamento/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdEquipamento,Nome,Tipo,Localizacao,DataInstalacao,Estado")] Equipamento equipamento)
-        {
-            if (id != equipamento.IdEquipamento)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(equipamento);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EquipamentoExists(equipamento.IdEquipamento))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(equipamento);
-        }
-
-        // GET: Equipamento/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var equipamento = await _context.Equipamento
-                .FirstOrDefaultAsync(m => m.IdEquipamento == id);
-            if (equipamento == null)
-            {
-                return NotFound();
-            }
-
-            return View(equipamento);
-        }
-
-        // POST: Equipamento/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var equipamento = await _context.Equipamento.FindAsync(id);
-            if (equipamento != null)
-            {
-                _context.Equipamento.Remove(equipamento);
-            }
-
-            await _context.SaveChangesAsync();
+            await _equipamentoRepository.AddAsync(equipamento);
             return RedirectToAction(nameof(Index));
         }
-
-        private bool EquipamentoExists(int id)
-        {
-            return _context.Equipamento.Any(e => e.IdEquipamento == id);
-        }
+        return View(equipamento);
     }
-}
+
+    // GET: Equipamento/Edit/{id}
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null) return NotFound();
+
+        var equipamento = await _equipamentoRepository.GetByIdAsync(id.Value);
+        if (equipamento == null) return NotFound();
+
+        return View(equipamento);
+    }
+
+    // POST: Equipamento/Edit/{id}
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, [Bind("IdEquipamento,Nome,Descricao")] Equipamento equipamento)
+    {
+        if (id != equipamento.IdEquipamento) return NotFound();
+
+        if (ModelState.IsValid)
+        {
+            await _equipamentoRepository.UpdateAsync(equipamento);
+            return RedirectToAction(nameof(Index));
+        }
+        return View(equipamento);
+
+

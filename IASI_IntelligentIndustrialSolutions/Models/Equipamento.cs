@@ -13,25 +13,23 @@ namespace IASI_IntelligentIndustrialSolutions.Models
         public int IdEquipamento { get; set; }
 
         [Column("nome_equipamento")]
-        [Required]
-        public required string Nome { get; set; }
+        [Required(ErrorMessage = "O campo Nome do Equipamento é obrigatório.")]
+        public string Nome { get; set; }
 
         [Column("tipo_equipamento")]
-        [Required]
+        [Required(ErrorMessage = "O campo Tipo de Equipamento é obrigatório.")]
         public string Tipo { get; set; }
 
         [Column("localizacao_equipamento")]
-        [Required]
+        [Required(ErrorMessage = "O campo Localização do Equipamento é obrigatório.")]
         public string Localizacao { get; set; }
 
         [Column("data_instalacao_equipamento")]
         public DateTime DataInstalacao { get; set; }
 
         [Column("estado_equipamento")]
-        [Required]
+        [Required(ErrorMessage = "O campo Estado do Equipamento é obrigatório.")]
         public string Estado { get; set; }
 
-        // Relacionamento com Consumo
-        public ICollection<Consumo> Consumos { get; set; }
     }
 }
