@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using IASI_IntelligentIndustrialSolutions.Models;
 
@@ -18,8 +21,7 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
         // GET: Empresa
         public async Task<IActionResult> Index()
         {
-            var empresas = await _context.Empresa.ToListAsync();
-            return View(empresas);
+            return View(await _context.Empresa.ToListAsync());
         }
 
         // GET: Empresa/Details/5
@@ -47,9 +49,11 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
         }
 
         // POST: Empresa/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdEmpresa,NomeEmpresa,SetorIndustrial,Localizacao,Tipo,ConformidadeRegulamentar")] Empresa empresa)
+        public async Task<IActionResult> Create([Bind("IdEmpresa,Nome,SetorIndustrial,Localizacao,Tipo,ConformidadeRegulamentar")] Empresa empresa)
         {
             if (ModelState.IsValid)
             {
@@ -77,9 +81,11 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
         }
 
         // POST: Empresa/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdEmpresa,NomeEmpresa,SetorIndustrial,Localizacao,Tipo,ConformidadeRegulamentar")] Empresa empresa)
+        public async Task<IActionResult> Edit(int id, [Bind("IdEmpresa,Nome,SetorIndustrial,Localizacao,Tipo,ConformidadeRegulamentar")] Empresa empresa)
         {
             if (id != empresa.IdEmpresa)
             {
@@ -133,7 +139,11 @@ namespace IASI_IntelligentIndustrialSolutions.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var empresa = await _context.Empresa.FindAsync(id);
-            _context.Empresa.Remove(empresa);
+            if (empresa != null)
+            {
+                _context.Empresa.Remove(empresa);
+            }
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
